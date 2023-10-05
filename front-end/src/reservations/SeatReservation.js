@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useHistory, useParams} from "react-router-dom"
-import { getReservation, listTables } from "../utils/api";
+import { getReservation, listTables, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 
@@ -35,17 +35,25 @@ return () => abortController.abort();
 const handleCancel = () => {
     history.goBack()
 }
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
     setSeatReservationError(null)
     event.preventDefault()
     const resParty = reservation.people
     const foundTable = tables.find((table) => table.table_id === Number(selectedTable))
     if(resParty > foundTable.capacity){
-        setSeatReservationError({error: {message: `This table cannot accomodate your party of ${resParty}. Please select a different table`}})
+        setSeatReservationError({message: `This table cannot accomodate your party of ${resParty}. Please select a different table`})
     } else if(foundTable.reservation_id){
-        setSeatReservationError({error: {message: `This table is currently reserved, please choose a different table.`}})
+        setSeatReservationError({message: `This table is currently reserved, please choose a different table.`})
     } else {
-        console.log("Submitted!")
+        const abortController = new AbortController()
+        try{
+            await updateTable(Number(selectedTable), Number(reservation_id), abortController.signal)
+            history.push("/dashboard")
+            setSelectedTable("")
+        } catch (error){
+            setSeatReservationError(error)
+        }
+        return () => abortController.abort();
     }
 };
 
@@ -73,6 +81,7 @@ const handleSubmit = (event) => {
         <button type="button" onClick={handleCancel}>Cancel</button>
         <ErrorAlert error={reservationError} />
         <ErrorAlert error={tablesError} />
+        <ErrorAlert error={seatReservationError} />
         </div>
     )
     }

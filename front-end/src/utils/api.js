@@ -93,3 +93,14 @@ export async function getReservation(param, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${param}`);
   return await fetchJson(url, { headers, signal }, [])
 }
+// PUT tables/:table_id/seat
+export async function updateTable(tableId, reservationId, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
+  const method = "PUT"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  const body = JSON.stringify({data: {reservation_id: reservationId}})
+  return await fetchJson(url, {method, headers, body, signal}, [])
+}
