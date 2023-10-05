@@ -59,11 +59,33 @@ async function fetchJson(url, options, onCancel) {
  */
 
 export async function listReservations(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
+  const url = new URL(`${API_BASE_URL}/reservations?date=${params}`);
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+export async function createReservation(reservation, signal){
+  const url = new URL(`${API_BASE_URL}/reservations`)
+  const method = "POST"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  const body = JSON.stringify({data: reservation})
+  return await fetchJson(url, {method, headers, body, signal}, [])
+}
+export async function createTable(newTable, signal){
+  const url = new URL(`${API_BASE_URL}/tables`)
+  const method = "POST"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  const body = JSON.stringify({data: newTable})
+  return await fetchJson(url, {method, headers, body, signal}, [])
+}
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, [])
 }
