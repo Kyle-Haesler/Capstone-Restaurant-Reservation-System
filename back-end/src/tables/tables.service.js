@@ -10,9 +10,13 @@ function list(){
 function read(tableID){
     return knex("tables").where("table_id", tableID)
 }
+function update(tableID, data){
+    return knex("tables").select("*").where("table_id", tableID).update(data, "*")
+}
 
 module.exports = {
     list,
     create,
-    read
+    read,
+    update
 }

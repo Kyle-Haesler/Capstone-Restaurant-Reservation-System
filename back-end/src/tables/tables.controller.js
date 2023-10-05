@@ -72,6 +72,13 @@ function read(req, res, next){
   const table = res.locals.table
   res.json({data: table})
 }
+// PUT tables/:table_id/seat
+async function update(req, res, next){
+  
+  const tableId = req.params.table_id
+  const data = await tablesService.update(tableId, req.body.data)
+  res.json({data})
+}
   
   
   module.exports = {
@@ -85,5 +92,9 @@ function read(req, res, next){
     read: [
       asyncErrorBoundary(tableExists),
       read
+    ],
+    update: [
+      asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(update)
     ]
   };
