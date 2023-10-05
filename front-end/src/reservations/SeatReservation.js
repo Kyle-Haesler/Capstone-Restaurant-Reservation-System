@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {useHistory, useParams} from "react-router-dom"
-import { getReservation } from "../utils/api";
+import { getReservation, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 
@@ -9,8 +9,15 @@ function SeatReservation(){
     const [reservationError, setReservationError] = useState(null)
     const [tables, setTables] = useState([])
     const [tablesError, setTablesError] = useState(null)
+    const [selectedTable, setSelectedTable] = useState("");
+    const [seatReservationError, setSeatReservationError] = useState(null)
     const {reservation_id} = useParams()
-    useEffect(loadReservation, [reservation_id])
+    const history = useHistory()
+    useEffect(() => {
+        loadReservation()
+        loadTables()
+    }, [reservation_id])
+
     function loadReservation(){
         const abortController = new AbortController();
         setReservationError(null)
@@ -18,10 +25,56 @@ function SeatReservation(){
         .then(setReservation).catch(setReservationError)
     return () => abortController.abort();
   }
-  console.log(reservation)
+  function loadTables(){
+    const abortController = new AbortController();
+    setTablesError(null)
+    listTables(abortController.signal)
+    .then(setTables).catch(setTablesError)
+return () => abortController.abort();
+}
+const handleCancel = () => {
+    history.goBack()
+}
+const handleSubmit = (event) => {
+    setSeatReservationError(null)
+    event.preventDefault()
+    const resParty = reservation.people
+    const foundTable = tables.find((table) => table.table_id === Number(selectedTable))
+    if(resParty > foundTable.capacity){
+        setSeatReservationError({error: {message: `This table cannot accomodate your party of ${resParty}. Please select a different table`}})
+    } else if(foundTable.reservation_id){
+        setSeatReservationError({error: {message: `This table is currently reserved, please choose a different table.`}})
+    } else {
+        console.log("Submitted!")
+    }
+};
+
   return (
-    <p>{reservation.first_name}</p>
-  )
+        <div>
+        <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="table_id">Select a Table:</label>
+        <select
+          id="table_id"
+          name="table_id"
+          value={selectedTable}
+          onChange={(e) => setSelectedTable(e.target.value)}
+        >
+          <option value="">Select a table...</option>
+          {tables.map((table) => (
+            <option key={table.table_id} value={table.table_id}>
+              Table Name: {table.table_name} Table Capacity: {table.capacity}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button type="submit">Seat Reservation</button>
+    </form>
+        <button type="button" onClick={handleCancel}>Cancel</button>
+        <ErrorAlert error={reservationError} />
+        <ErrorAlert error={tablesError} />
+        </div>
+    )
     }
 
 
