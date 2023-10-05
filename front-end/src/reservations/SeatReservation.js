@@ -69,7 +69,7 @@ const handleSubmit = async (event) => {
           <option value="">Select a table...</option>
           {tables.map((table) => (
             <option key={table.table_id} value={table.table_id}>
-              Table Name: {table.table_name} Table Capacity: {table.capacity}
+              {table.table_name} - {table.capacity}
             </option>
           ))}
         </select>
