@@ -13,10 +13,15 @@ function read(tableID){
 function update(tableID, data){
     return knex("tables").select("*").where("table_id", tableID).update(data, "*")
 }
+// grabbing reservation ID to find the number of people and validate it exists as well
+function readRes(resID){
+    return knex("reservations").where("reservation_id", resID)
+}
 
 module.exports = {
     list,
     create,
     read,
-    update
+    update,
+    readRes
 }

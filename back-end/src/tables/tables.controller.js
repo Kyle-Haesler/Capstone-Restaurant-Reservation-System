@@ -82,6 +82,48 @@ function dataExists(req, res, next){
   }
   return next()
 }
+function reservationIdPresent(req, res, next){
+  if(!req.body.data.reservation_id){
+    next({
+      status: 400,
+      message: "Please include a reservation_id property in your request"
+    })
+  }
+  return next()
+}
+async function reservationExists(req, res, next){
+  const resID = req.body.data.reservation_id
+  const data = await tablesService.readRes(resID)
+  if(data.length === 0){
+    return next({
+      status: 404,
+      message: `Reservation Id ${resID} does not exist.`
+    })
+  }
+  res.locals.reservation = data[0]
+  next()
+}
+function tableHasCapacity(req, res, next){
+  const resParty = res.locals.reservation.people
+  const capacity = res.locals.table.capacity
+  if(resParty > capacity){
+    return next({
+      status: 400,
+      message: "The table does not have the capacity to fit this reservation, please try a different table."
+    })
+  }
+  next()
+}
+function tableIsOpen(req, res, next){
+  const status = res.locals.table.reservation_id
+  if(status){
+    return next({
+      status: 400,
+      message: "This table is currently occupied, please select a different table."
+    })
+  }
+  next()
+}
 // PUT tables/:table_id/seat
 async function update(req, res, next){
   
@@ -105,7 +147,11 @@ async function update(req, res, next){
     ],
     update: [
       dataExists,
+      reservationIdPresent,
+      asyncErrorBoundary(reservationExists),
       asyncErrorBoundary(tableExists),
+      tableHasCapacity,
+      tableIsOpen,
       asyncErrorBoundary(update)
     ]
   };
