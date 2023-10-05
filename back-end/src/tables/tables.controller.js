@@ -72,6 +72,16 @@ function read(req, res, next){
   const table = res.locals.table
   res.json({data: table})
 }
+// PUT tables/:table_id/seat validation
+function dataExists(req, res, next){
+  if(!req.body.data){
+    next({
+      status: 400,
+      message: "Must include a data property in body."
+    })
+  }
+  return next()
+}
 // PUT tables/:table_id/seat
 async function update(req, res, next){
   
@@ -94,6 +104,7 @@ async function update(req, res, next){
       read
     ],
     update: [
+      dataExists,
       asyncErrorBoundary(tableExists),
       asyncErrorBoundary(update)
     ]
