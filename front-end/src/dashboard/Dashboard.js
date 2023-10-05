@@ -74,7 +74,8 @@ function Dashboard({ date }) {
       {reservations.map((reservation, index) => (
         <div key={index}>
           <h3>Reservation: {reservation.reservation_id}</h3>
-          <p>Name: {reservation.first_name} {reservation.last_name}</p>
+          <p>First Name: {reservation.first_name}</p>
+          <p>Last Name: {reservation.last_name}</p>
           <p>Phone Number: {reservation.mobile_number}</p>
           <p>Date: {reservation.reservation_date}</p>
           <p>Time: {reservation.reservation_time}</p>

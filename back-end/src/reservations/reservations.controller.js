@@ -84,6 +84,8 @@ function isReservationDateValid(req, res, next){
       message: "Reservation date must be in the future."
     })
   }
+  res.locals.resDate = reservation_date
+  res.locals.current = currentDate
   return next()
 }
 function isReservationTimeValid(req, res, next){
@@ -96,11 +98,13 @@ function isReservationTimeValid(req, res, next){
     })
   }
   const nowTime = []
+  const resDate = res.locals.resDate
+  const currentDate = res.locals.current
   const now = new Date()
   nowTime.push(now.getHours())
   nowTime.push(now.getMinutes())
   const compareableNowTime = Number(nowTime.join(""))
-  if(numberTime < compareableNowTime){
+  if(numberTime < compareableNowTime && currentDate === resDate){
     next({
       status: 400,
       message: "Please ensure you are making a reservation time that is in the future so we may accomodate."

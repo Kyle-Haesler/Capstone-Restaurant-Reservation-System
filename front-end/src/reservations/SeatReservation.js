@@ -13,10 +13,8 @@ function SeatReservation(){
     const [seatReservationError, setSeatReservationError] = useState(null)
     const {reservation_id} = useParams()
     const history = useHistory()
-    useEffect(() => {
-        loadReservation()
-        loadTables()
-    }, [reservation_id])
+    useEffect(loadReservation, [reservation_id])
+    useEffect(loadTables, [reservation_id])
 
     function loadReservation(){
         const abortController = new AbortController();
