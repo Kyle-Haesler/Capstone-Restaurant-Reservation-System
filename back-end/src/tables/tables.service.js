@@ -7,8 +7,12 @@ function create(newTable){
 function list(){
     return knex("tables").select("*").orderBy("table_name")
 }
+function read(tableID){
+    return knex("tables").where("table_id", tableID)
+}
 
 module.exports = {
     list,
     create,
+    read
 }

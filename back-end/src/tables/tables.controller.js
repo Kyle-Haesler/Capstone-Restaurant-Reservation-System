@@ -40,11 +40,25 @@ const requiredProperties = [
         if(table_name.trim().length < 2){
             next({
                 status: 400,
-                message: "table_name must be atleast two characters in length"
+                message: "table_name must be atleast two characters in length."
             })
         }
         return next()
     }
+
+// read validations
+async function tableExists(req, res, next){
+  const tableId = req.params.table_id
+  const data = await tablesService.read(tableId)
+  if(data.length === 0){
+    return next({
+      status: 404,
+      message: `Table Id ${tableId} does not exist.`
+    })
+  }
+  res.locals.table = data[0]
+  next()
+}
 
 async function create(req, res, next){
     const data = await tablesService.create(req.body.data)
@@ -53,6 +67,10 @@ async function create(req, res, next){
 async function list(req, res, next){
     const data = await tablesService.list()
     res.json({data})
+}
+function read(req, res, next){
+  const table = res.locals.table
+  res.json({data: table})
 }
   
   
@@ -63,5 +81,9 @@ async function list(req, res, next){
         validCapacity,
         validTableName,
         asyncErrorBoundary(create)
+    ],
+    read: [
+      asyncErrorBoundary(tableExists),
+      read
     ]
   };
