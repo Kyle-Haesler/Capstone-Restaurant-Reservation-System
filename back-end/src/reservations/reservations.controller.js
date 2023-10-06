@@ -61,6 +61,18 @@ if (typeof people === "string" || people <= 0) {
 }
 return next()
 }
+function validStatusForNewReservation(req, res, next){
+  const resStatus = req.body.data.status
+  if(resStatus){
+    if(resStatus !== "booked"){
+      return next({
+        status: 400,
+        message: `${resStatus} is not valid. All reservations must initially be 'booked'.`
+      })
+    }
+  }
+  next()
+}
 function restaurantOpen(req, res, next){
   const {reservation_date} = req.body.data
   const daysOfTheWeek =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -140,6 +152,32 @@ function read(req, res, next){
   const reservation = res.locals.reservation
   res.json({data: reservation})
 }
+// validation for PUT /reservations/:reservation_id/status
+const validStatuses = [
+  "booked",
+  "seated",
+  "finished"
+]
+function statusUpdateisValid(req, res, next){
+  const resStatus = req.body.data.status
+  if(!validStatuses.includes(resStatus)){
+    return next({
+      status: 400,
+      message: `Inputted status: ${resStatus}, valid statuses include: booked, seated, finished.`
+    })
+  }
+  next()
+}
+function statusUpdateAvailable(req, res, next){
+  const existingStatus = res.locals.reservation.status
+  if(existingStatus === "finished"){
+    return next({
+      status: 400,
+      message: "This reservation is finished, a finished reservation cannot be updated."
+    })
+  }
+  next()
+}
 // PUT reservations/:reservation_id/status
 async function update(req, res, next){
   const resID = req.params.reservation_id
@@ -159,10 +197,13 @@ module.exports = {
     restaurantOpen,
     isReservationDateValid,
     isReservationTimeValid,
+    validStatusForNewReservation,
     asyncErrorBoundary(create)
   ],
   update: [
     asyncErrorBoundary(reservationExists),
+    statusUpdateisValid,
+    statusUpdateAvailable,
     asyncErrorBoundary(update)
   ]
 };

@@ -103,6 +103,18 @@ async function reservationExists(req, res, next){
   res.locals.reservation = data[0]
   next()
 }
+// PUT /tables/:table_id/seat validation 
+// make sure the reservation isn't already seated
+function reservationNotAlreadySeated(req, res, next){
+  const resStatus = res.locals.reservation.status
+  if(resStatus === "seated"){
+    return next({
+      status: 400,
+      message: "This reservation has already been seated."
+    })
+  }
+  next()
+}
 function tableHasCapacity(req, res, next){
   const resParty = res.locals.reservation.people
   const capacity = res.locals.table.capacity
@@ -169,6 +181,7 @@ async function destroy(req, res, next){
       dataExists,
       reservationIdPresent,
       asyncErrorBoundary(reservationExists),
+      reservationNotAlreadySeated,
       asyncErrorBoundary(tableExists),
       tableHasCapacity,
       tableIsOpen,
