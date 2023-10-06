@@ -104,3 +104,13 @@ export async function updateTable(tableId, reservationId, signal){
   const body = JSON.stringify({data: {reservation_id: reservationId}})
   return await fetchJson(url, {method, headers, body, signal}, [])
 }
+// DELETE tables/:table_id/seat
+export async function removeTableAssignment(tableId, signal){
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
+  const method = "DELETE"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  return await fetchJson(url, {method, headers, signal}, [])
+}

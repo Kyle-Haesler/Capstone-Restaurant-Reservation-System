@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import { listTables } from "../utils/api";
+import { removeTableAssignment } from "../utils/api";
 import { previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import {useHistory, useLocation} from "react-router-dom"
@@ -15,6 +16,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  const [endDiningExperienceError, setEndDiningExperienceError] = useState(null)
   const history = useHistory()
   const location = useLocation()
   const params = new URLSearchParams(location.search)
@@ -55,12 +57,19 @@ function Dashboard({ date }) {
     const newDate = next(applicableDate)
     history.push(`/dashboard?date=${newDate}`);
   }
-  function handleFinish(tableID){
+  async function handleFinish(tableID){
+    setEndDiningExperienceError(null)
     const confirmMessage = "Is this table ready to seat new guests? This cannot be undone."
     const confirmed = window.confirm(confirmMessage)
     if(confirmed){
-      /// need to implement delete request here.
-      console.log(tableID)
+      const abortController = new AbortController()
+      try {
+        await removeTableAssignment(Number(tableID), abortController.signal)
+        window.location.reload()
+      } catch (error) {
+        setEndDiningExperienceError(error)
+      }
+      return () => abortController.abort();
     }
   }
 
@@ -116,6 +125,7 @@ function Dashboard({ date }) {
             onClick={() => handleFinish(table.table_id)}
             >Finish</button>
           )}
+          <ErrorAlert error={endDiningExperienceError} />
           </div>
         ))}
       </div>

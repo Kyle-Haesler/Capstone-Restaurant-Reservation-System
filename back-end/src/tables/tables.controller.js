@@ -124,6 +124,17 @@ function tableIsOpen(req, res, next){
   }
   next()
 }
+function tableIsNotSeated(req, res, next){
+  const status = res.locals.table.reservation_id
+  if(!status){
+    return next({
+      status: 400,
+      message: "This table is not occupied, please select a different table to finish."
+    })
+  }
+  next()
+}
+
 // PUT tables/:table_id/seat
 async function update(req, res, next){
   
@@ -135,7 +146,7 @@ async function update(req, res, next){
 async function destroy(req, res, next){
   const tableId = req.params.table_id
   const data = await tablesService.delete(tableId)
-  res.status(204).json({data})
+  res.json({data})
 }
   
   
@@ -162,6 +173,7 @@ async function destroy(req, res, next){
     ],
     delete: [
       asyncErrorBoundary(tableExists),
+      tableIsNotSeated,
       asyncErrorBoundary(destroy)
     ]
   };
