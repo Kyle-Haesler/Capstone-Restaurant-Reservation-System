@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {useHistory, useParams} from "react-router-dom"
-import { getReservation, listTables, updateTable, updateReservationStatus } from "../utils/api";
+import { getReservation, listTables, updateTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 
 function SeatReservation(){
     const [reservation, setReservation] = useState([])
     const [reservationError, setReservationError] = useState(null)
-    const [reservationStatusError, setReservationStatusError] = useState(null)
     const [tables, setTables] = useState([])
     const [tablesError, setTablesError] = useState(null)
     const [selectedTable, setSelectedTable] = useState("");
@@ -36,7 +35,6 @@ const handleCancel = () => {
 }
 const handleSubmit = async (event) => {
     setSeatReservationError(null)
-    setReservationStatusError(null)
     event.preventDefault()
     const resParty = reservation.people
     const foundTable = tables.find((table) => table.table_id === Number(selectedTable))
@@ -48,12 +46,11 @@ const handleSubmit = async (event) => {
         const abortController = new AbortController()
         try{
             await updateTable(Number(selectedTable), Number(reservation_id), abortController.signal)
-            await updateReservationStatus(Number(reservation_id), "seated", abortController.signal)
             history.push("/dashboard")
             setSelectedTable("")
         } catch (error){
             setSeatReservationError(error)
-            setReservationStatusError(error)
+            
         }
         return () => abortController.abort();
     }
@@ -84,7 +81,6 @@ const handleSubmit = async (event) => {
         <ErrorAlert error={reservationError} />
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={seatReservationError} />
-        <ErrorAlert error={reservationStatusError} />
         </div>
     )
     }

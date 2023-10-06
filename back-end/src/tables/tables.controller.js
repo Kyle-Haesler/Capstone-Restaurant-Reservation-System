@@ -136,13 +136,15 @@ function tableIsNotSeated(req, res, next){
 }
 
 // PUT tables/:table_id/seat
-async function update(req, res, next){
+async function reserveAndChangeStatus(req, res, next){
   
   const tableId = req.params.table_id
-  const data = await tablesService.update(tableId, req.body.data)
+  const resId = res.locals.reservation.reservation_id
+  const status = "seated"
+  const data = await tablesService.reserveAndChangeStatus(tableId, resId, status)
   res.json({data})
 }
-// DELETE tables:table_id/seat
+// DELETE tables/:table_id/seat
 async function destroy(req, res, next){
   const tableId = req.params.table_id
   const data = await tablesService.delete(tableId)
@@ -169,7 +171,7 @@ async function destroy(req, res, next){
       asyncErrorBoundary(tableExists),
       tableHasCapacity,
       tableIsOpen,
-      asyncErrorBoundary(update)
+      asyncErrorBoundary(reserveAndChangeStatus)
     ],
     delete: [
       asyncErrorBoundary(tableExists),

@@ -10,8 +10,30 @@ function list(){
 function read(tableID){
     return knex("tables").where("table_id", tableID)
 }
-function update(tableID, data){
-    return knex("tables").select("*").where("table_id", tableID).update(data, "*")
+// update and change status
+async function reserveAndChangeStatus(tableID, resID, status){
+    try{
+        const result = await knex.transaction(async (trx) => {
+            const updatedTable = await trx("tables")
+            .select("*")
+            .where("table_id", tableID)
+            .update({reservation_id: resID}, "*")
+            const updatedStatus = await trx("reservations")
+            .select("*")
+            .where("reservation_id", resID)
+            .update({status})
+            
+            if(updatedTable && updatedStatus){
+                await trx.commit()
+            } else {
+                await trx.rollback()
+            }
+        })
+        return result 
+    } catch (error) {
+        return error
+    }
+    
 }
 function destroy(tableID){
     return knex("tables").select("*").where("table_id", tableID).update({reservation_id: null}, "*")
@@ -25,7 +47,7 @@ module.exports = {
     list,
     create,
     read,
-    update,
+    reserveAndChangeStatus,
     delete: destroy,
     readRes
 }
