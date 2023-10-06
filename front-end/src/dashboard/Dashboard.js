@@ -89,6 +89,7 @@ function Dashboard({ date }) {
       </div>
       <div>
       {reservations.map((reservation, index) => (
+        reservation.status !== "finished" && (
         <div key={index}>
           <h3>Reservation: {reservation.reservation_id}</h3>
           <p>First Name: {reservation.first_name}</p>
@@ -108,6 +109,7 @@ function Dashboard({ date }) {
             </a>
             )}
           </div>
+        )
       ))}
       </div>
       <br />

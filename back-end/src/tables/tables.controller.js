@@ -147,7 +147,8 @@ async function reserveAndChangeStatus(req, res, next){
 // DELETE tables/:table_id/seat
 async function destroy(req, res, next){
   const tableId = req.params.table_id
-  const data = await tablesService.delete(tableId)
+  const status = "finished"
+  const data = await tablesService.delete(tableId, status)
   res.json({data})
 }
   
