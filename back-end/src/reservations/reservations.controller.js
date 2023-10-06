@@ -137,12 +137,21 @@ async function reservationExists(req, res, next){
   res.locals.reservation = data[0]
   next()
 }
-async function list(req, res) {
+async function list(req, res, next) {
+  if(req.query.date){
   const date = req.query.date
   const data = await reservationsService.list(date)
-  res.json({
-    data
-  });
+  res.json({data})
+  } else if (req.query.mobile_number){
+    const mobileNumber = req.query.mobile_number
+    const data = await reservationsService.searchByPhoneNumber(mobileNumber)
+    res.json({data})
+  } else {
+    next({
+      status: 400,
+      message: "Invalid query parameter"
+    })
+  }
 }
 async function create(req, res, next){
   const data = await reservationsService.create(req.body.data)

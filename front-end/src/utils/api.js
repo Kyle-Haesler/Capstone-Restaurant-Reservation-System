@@ -126,3 +126,10 @@ export async function updateReservationStatus(resID, status, signal){
   const body = JSON.stringify({data: {status: status}})
   return await fetchJson(url, {method, headers, body, signal}, [])
 }
+// GET reservations/?mobile_number
+export async function searchReservations(params, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${params}`);
+  return await fetchJson(url, { headers, signal }, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
