@@ -131,6 +131,12 @@ async function update(req, res, next){
   const data = await tablesService.update(tableId, req.body.data)
   res.json({data})
 }
+// DELETE tables:table_id/seat
+async function destroy(req, res, next){
+  const tableId = req.params.table_id
+  const data = await tablesService.delete(tableId)
+  res.status(204).json({data})
+}
   
   
   module.exports = {
@@ -153,5 +159,9 @@ async function update(req, res, next){
       tableHasCapacity,
       tableIsOpen,
       asyncErrorBoundary(update)
+    ],
+    delete: [
+      asyncErrorBoundary(tableExists),
+      asyncErrorBoundary(destroy)
     ]
   };

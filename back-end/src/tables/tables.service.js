@@ -13,6 +13,9 @@ function read(tableID){
 function update(tableID, data){
     return knex("tables").select("*").where("table_id", tableID).update(data, "*")
 }
+function destroy(tableID){
+    return knex("tables").select("*").where("table_id", tableID).update({reservation_id: null}, "*")
+}
 // grabbing reservation ID to find the number of people and validate it exists as well
 function readRes(resID){
     return knex("reservations").where("reservation_id", resID)
@@ -23,5 +26,6 @@ module.exports = {
     create,
     read,
     update,
+    delete: destroy,
     readRes
 }

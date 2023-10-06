@@ -55,6 +55,14 @@ function Dashboard({ date }) {
     const newDate = next(applicableDate)
     history.push(`/dashboard?date=${newDate}`);
   }
+  function handleFinish(tableID){
+    const confirmMessage = "Is this table ready to seat new guests? This cannot be undone."
+    const confirmed = window.confirm(confirmMessage)
+    if(confirmed){
+      /// need to implement delete request here.
+      console.log(tableID)
+    }
+  }
 
   return (
     <main>
@@ -101,6 +109,13 @@ function Dashboard({ date }) {
           <p>Capacity: {table.capacity}</p>
           <p>Created At: {table.created_at}</p>
           <p>Updated At: {table.updated_at}</p>
+          {table.reservation_id && (
+            <button 
+            type="button"
+            data-table-id-finish={table.table_id}
+            onClick={() => handleFinish(table.table_id)}
+            >Finish</button>
+          )}
           </div>
         ))}
       </div>
