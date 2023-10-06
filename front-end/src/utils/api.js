@@ -114,3 +114,15 @@ export async function removeTableAssignment(tableId, signal){
   }
   return await fetchJson(url, {method, headers, signal}, [])
 }
+
+// PUT reservations/:reservation_id/status
+export async function updateReservationStatus(resID, status, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${resID}/status`)
+  const method = "PUT"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  const body = JSON.stringify({data: {status: status}})
+  return await fetchJson(url, {method, headers, body, signal}, [])
+}

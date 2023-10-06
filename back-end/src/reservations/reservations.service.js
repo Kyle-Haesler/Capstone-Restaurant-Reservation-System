@@ -10,10 +10,14 @@ function create(reservation){
 function read(resID){
     return knex("reservations").where("reservation_id", resID)
 }
+function update(resID, data){
+    return knex("reservations").select("*").where("reservation_id", resID).update(data, "*")
+}
 
 module.exports = {
     list,
     create,
-    read
+    read,
+    update
     
 }

@@ -140,6 +140,12 @@ function read(req, res, next){
   const reservation = res.locals.reservation
   res.json({data: reservation})
 }
+// PUT reservations/:reservation_id/status
+async function update(req, res, next){
+  const resID = req.params.reservation_id
+  const data = await reservationsService.update(resID, req.body.data)
+  res.json({data})
+}
 
 
 module.exports = {
@@ -154,5 +160,9 @@ module.exports = {
     isReservationDateValid,
     isReservationTimeValid,
     asyncErrorBoundary(create)
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(update)
   ]
 };

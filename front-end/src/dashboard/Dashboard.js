@@ -99,9 +99,14 @@ function Dashboard({ date }) {
           <p>Party Of: {reservation.people}</p>
           <p>Created At: {reservation.created_at}</p>
           <p>Updated At: {reservation.updated_at}</p>
-          <a href={`/reservations/${reservation.reservation_id}/seat`}>
-            <button>Seat</button>
-          </a>
+          <div data-reservation-id-status={reservation.reservation_id}>
+            Status: {reservation.status}
+            </div>
+            {reservation.status === "booked" && (
+              <a href={`/reservations/${reservation.reservation_id}/seat`}>
+              <button>Seat</button>
+            </a>
+            )}
           </div>
       ))}
       </div>
