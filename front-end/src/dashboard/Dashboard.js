@@ -6,6 +6,7 @@ import { updateReservationStatus } from "../utils/api";
 import { previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import {useHistory, useLocation} from "react-router-dom"
+import ReservationsList from "../reservations/ReservationsList";
 /**
  * Defines the dashboard page.
  * @param date
@@ -113,34 +114,7 @@ function Dashboard({ date }) {
       <ErrorAlert error={tablesError} />
       </div>
       <div>
-      {reservations.map((reservation, index) => (
-        reservation.status !== "finished" && reservation.status !== "cancelled" && (
-        <div key={index}>
-          <h3>Reservation: {reservation.reservation_id}</h3>
-          <p>First Name: {reservation.first_name}</p>
-          <p>Last Name: {reservation.last_name}</p>
-          <p>Phone Number: {reservation.mobile_number}</p>
-          <p>Date: {reservation.reservation_date}</p>
-          <p>Time: {reservation.reservation_time}</p>
-          <p>Party Of: {reservation.people}</p>
-          <p>Created At: {reservation.created_at}</p>
-          <p>Updated At: {reservation.updated_at}</p>
-          <div data-reservation-id-status={reservation.reservation_id}>
-            Status: {reservation.status}
-            </div>
-            {reservation.status === "booked" && (
-              <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button>Seat</button>
-            </a>
-            )}
-            <a href={`/reservations/${reservation.reservation_id}/edit`}>
-              <button>Edit</button>
-            </a>
-            <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
-            <ErrorAlert error={cancelReservationError} />
-          </div>
-        )
-      ))}
+      <ReservationsList reservations={reservations} handleCancel={handleCancel} cancelReservationError={cancelReservationError} filterFinishedCancelled={true} />
       </div>
       <br />
       <div>

@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { searchReservations } from "../utils/api";
 import { updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationsList from "../reservations/ReservationsList";
 
 function SearchReservations() {
   const [mobileNumber, setMobileNumber] = useState("");
     const [reservations, setReservations] = useState([])
     const [reservationsError, setReservationsError] = useState(null)
     const [cancelReservationError, setCancelReservationError] = useState(null)
+    const [searchPerformed, setSearchPerformed] = useState(false)
   const handleChange = ({target}) => {
     setMobileNumber(target.value);
   };
@@ -19,6 +21,7 @@ function SearchReservations() {
     try {
         const data = await searchReservations(mobileNumber)
         setReservations(data)
+        setSearchPerformed(true)
 
     } catch(error){
         setReservationsError(error)
@@ -56,35 +59,10 @@ function SearchReservations() {
         <button type="submit">Find</button>
       </form>
       <div>
-        {reservations.length === 0 ? (
+        {reservations.length === 0 && searchPerformed ? (
             <p>No reservations found</p>
         ) : (
-      reservations.map((reservation, index) => (
-        <div key={index}>
-          <h3>Reservation: {reservation.reservation_id}</h3>
-          <p>First Name: {reservation.first_name}</p>
-          <p>Last Name: {reservation.last_name}</p>
-          <p>Phone Number: {reservation.mobile_number}</p>
-          <p>Date: {reservation.reservation_date}</p>
-          <p>Time: {reservation.reservation_time}</p>
-          <p>Party Of: {reservation.people}</p>
-          <p>Created At: {reservation.created_at}</p>
-          <p>Updated At: {reservation.updated_at}</p>
-          <div data-reservation-id-status={reservation.reservation_id}>
-            Status: {reservation.status}
-            </div>
-            {reservation.status === "booked" && (
-              <a href={`/reservations/${reservation.reservation_id}/seat`}>
-              <button>Seat</button>
-            </a>
-            )}
-            <a href={`/reservations/${reservation.reservation_id}/edit`}>
-              <button>Edit</button>
-            </a>
-            <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
-            <ErrorAlert error={cancelReservationError} />
-          </div>
-          ))
+            <ReservationsList reservations={reservations} handleCancel={handleCancel} cancelReservationError={cancelReservationError} filterFinishedCancelled={false} />
       )}
       </div>
       <ErrorAlert error={reservationsError} />
