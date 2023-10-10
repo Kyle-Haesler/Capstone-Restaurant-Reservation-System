@@ -34,7 +34,24 @@ function NewReservation(){
         setReservationsError(null)
         const abortController = new AbortController();
         event.preventDefault()
-        try {
+        const daysOfTheWeek =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            const potentialReservationDate = new Date(formData.reservation_date)
+            const dayOfWeekIndex = potentialReservationDate.getDay()
+            const reservedDay = daysOfTheWeek[dayOfWeekIndex]
+            const currentDate = new Date().toISOString().split("T")[0]
+            // make sure reservation date is not on a Tuesday and not in the past
+            if(reservedDay === "Tuesday" && formData.reservation_date < currentDate){
+                setReservationsError({message: "The restaurant is closed on Tuesdays, please reserve a different day. Also, the reservation date must be in the future."})
+            }
+            // make sure reservation_date is not on a Tuesday as the restaurant is closed on Tuesdays.
+            else if(reservedDay === "Tuesday"){
+                setReservationsError({message: "The restaurant is closed on Tuesdays, please reserve a different day."})
+            } 
+            // make sure reservation_date is not in the past
+            else if (formData.reservation_date < currentDate){
+                setReservationsError({message: "Reservation date must be in the future."})
+            } else {
+            try {    
             await createReservation(formData, abortController.signal);
             history.push(`/dashboard?date=${formData.reservation_date}`);
             setFormData({...initialFormState});
@@ -42,6 +59,7 @@ function NewReservation(){
             setReservationsError(error)
         }
         return () => abortController.abort();
+    }
     };
     return (
         <div>
