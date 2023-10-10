@@ -10,7 +10,8 @@ function create(reservation){
 function read(resID){
     return knex("reservations").where("reservation_id", resID)
 }
-function update(resID, data){
+// PUT /reservations/:reservation_id/status
+function updateReservationStatus(resID, data){
     return knex("reservations").select("*").where("reservation_id", resID).update(data, "*").then((updatedRes) => updatedRes[0])
 }
 // GET /reservations?mobile_number
@@ -22,12 +23,16 @@ function searchByPhoneNumber(mobile_number){
     )
     .orderBy("reservation_date");
 }
+function update(resID, data){
+    return knex("reservations").select("*").where("reservation_id", resID).update(data, "*").then((updatedRes) => updatedRes[0]) 
+}
 
 module.exports = {
     list,
     create,
     read,
-    update,
-    searchByPhoneNumber
+    updateReservationStatus,
+    searchByPhoneNumber,
+    update
     
 }

@@ -28,7 +28,9 @@ function Dashboard({ date }) {
   } else {
     applicableDate = date
   }
+  
   useEffect(loadDashboard, [applicableDate]);
+  
 
   function loadDashboard() {
     const abortController = new AbortController();

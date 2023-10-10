@@ -133,3 +133,15 @@ export async function searchReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+// PUT reservations/:reservation_id
+export async function editReservation(resID, updatedRes, signal){
+  const url = new URL(`${API_BASE_URL}/reservations/${resID}`)
+  const method = "PUT"
+  const headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  }
+  const body = JSON.stringify({data: updatedRes})
+  return await fetchJson(url, {method, headers, body, signal}, [])
+}

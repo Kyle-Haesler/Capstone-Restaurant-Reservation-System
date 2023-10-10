@@ -189,6 +189,12 @@ function statusUpdateAvailable(req, res, next){
   next()
 }
 // PUT reservations/:reservation_id/status
+async function updateReservationStatus(req, res, next){
+  const resID = req.params.reservation_id
+  const data = await reservationsService.updateReservationStatus(resID, req.body.data)
+  res.json({data})
+}
+// PUT reservations/:reservation_id
 async function update(req, res, next){
   const resID = req.params.reservation_id
   const data = await reservationsService.update(resID, req.body.data)
@@ -210,10 +216,22 @@ module.exports = {
     validStatusForNewReservation,
     asyncErrorBoundary(create)
   ],
-  update: [
+  updateReservationStatus: [
     asyncErrorBoundary(reservationExists),
     statusUpdateisValid,
     statusUpdateAvailable,
+    asyncErrorBoundary(updateReservationStatus)
+  ],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    bodyDataComplete,
+    validDate,
+    validTime,
+    validPeople,
+    restaurantOpen,
+    isReservationDateValid,
+    isReservationTimeValid,
+    validStatusForNewReservation,
     asyncErrorBoundary(update)
   ]
 };
