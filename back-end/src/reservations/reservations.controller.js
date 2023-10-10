@@ -119,7 +119,7 @@ function isReservationTimeValid(req, res, next){
   if(numberTime < compareableNowTime && currentDate === resDate){
     next({
       status: 400,
-      message: "Please ensure you are making a reservation time that is in the future so we may accomodate."
+      message: "Please ensure you are making a reservation that is in the future so we may accomodate."
     })
   }
   return next()
