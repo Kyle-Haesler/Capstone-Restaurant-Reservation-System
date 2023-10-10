@@ -149,7 +149,6 @@ function tableIsNotSeated(req, res, next){
 
 // PUT tables/:table_id/seat
 async function reserveAndChangeStatus(req, res, next){
-  
   const tableId = req.params.table_id
   const resId = res.locals.reservation.reservation_id
   const status = "seated"

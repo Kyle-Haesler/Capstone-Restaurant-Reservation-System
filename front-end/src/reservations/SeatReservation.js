@@ -66,6 +66,7 @@ const handleSubmit = async (event) => {
           name="table_id"
           value={selectedTable}
           onChange={(e) => setSelectedTable(e.target.value)}
+          required
         >
           <option value="">Select a table...</option>
           {tables.map((table) => (
