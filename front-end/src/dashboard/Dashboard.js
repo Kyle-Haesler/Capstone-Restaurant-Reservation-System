@@ -61,19 +61,24 @@ function Dashboard({ date }) {
     const newDate = next(applicableDate)
     history.push(`/dashboard?date=${newDate}`);
   }
-  async function handleFinish(tableID){
+  async function handleFinish(tableID, reservationID){
     setEndDiningExperienceError(null)
     const confirmMessage = "Is this table ready to seat new guests? This cannot be undone."
     const confirmed = window.confirm(confirmMessage)
     if(confirmed){
       const abortController = new AbortController()
-      try {
-        await removeTableAssignment(Number(tableID), abortController.signal)
+        // make sure table is occupied before allowing to to finish
+        if(!reservationID){
+          setEndDiningExperienceError({message: "This table is not occupied, please select a different table to finish."})
+        } else {
+          try {
+          await removeTableAssignment(Number(tableID), abortController.signal)
         window.location.reload()
       } catch (error) {
         setEndDiningExperienceError(error)
       }
       return () => abortController.abort();
+    }
     }
   }
   async function handleCancel(reservationId){
@@ -154,7 +159,7 @@ function Dashboard({ date }) {
             <button 
             type="button"
             data-table-id-finish={table.table_id}
-            onClick={() => handleFinish(table.table_id)}
+            onClick={() => handleFinish(table.table_id, table.reservation_id)}
             >Finish</button>
           )}
           <ErrorAlert error={endDiningExperienceError} />
