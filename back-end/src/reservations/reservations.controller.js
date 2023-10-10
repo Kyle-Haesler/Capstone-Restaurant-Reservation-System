@@ -165,7 +165,8 @@ function read(req, res, next){
 const validStatuses = [
   "booked",
   "seated",
-  "finished"
+  "finished",
+  "cancelled"
 ]
 function statusUpdateisValid(req, res, next){
   const resStatus = req.body.data.status

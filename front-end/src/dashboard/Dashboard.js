@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import { listTables } from "../utils/api";
 import { removeTableAssignment } from "../utils/api";
+import { updateReservationStatus } from "../utils/api";
 import { previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import {useHistory, useLocation} from "react-router-dom"
@@ -17,6 +18,7 @@ function Dashboard({ date }) {
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
   const [endDiningExperienceError, setEndDiningExperienceError] = useState(null)
+  const [cancelReservationError, setCancelReservationError] = useState(null)
   const history = useHistory()
   const location = useLocation()
   const params = new URLSearchParams(location.search)
@@ -72,6 +74,22 @@ function Dashboard({ date }) {
       return () => abortController.abort();
     }
   }
+  async function handleCancel(reservationId){
+    const confirmed = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
+    if(confirmed){
+      setCancelReservationError(null)
+      const abortController = new AbortController()
+      const status = "cancelled"
+      try{
+        await updateReservationStatus(Number(reservationId), status, abortController.signal)
+        window.location.reload()
+      } catch (error){
+        setCancelReservationError(error)
+      }
+      return () => abortController.abort()
+    }
+
+  }
 
   return (
     <main>
@@ -89,7 +107,7 @@ function Dashboard({ date }) {
       </div>
       <div>
       {reservations.map((reservation, index) => (
-        reservation.status !== "finished" && (
+        reservation.status !== "finished" && reservation.status !== "cancelled" && (
         <div key={index}>
           <h3>Reservation: {reservation.reservation_id}</h3>
           <p>First Name: {reservation.first_name}</p>
@@ -108,6 +126,11 @@ function Dashboard({ date }) {
               <button>Seat</button>
             </a>
             )}
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>
+              <button>Edit</button>
+            </a>
+            <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
+            <ErrorAlert error={cancelReservationError} />
           </div>
         )
       ))}
