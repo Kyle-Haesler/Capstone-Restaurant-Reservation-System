@@ -101,6 +101,10 @@ function EditReservation(){
     };
     return (
         <div>
+            <div className="p-3 mb-2 bg-primary text-white">
+            <h1>Edit Reservation</h1>
+            </div>
+            <br />
         <ReservationForm formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} handleCancel={handleCancel} />
         <ErrorAlert error={reservationError} />
         <ErrorAlert error={updatedResError} />

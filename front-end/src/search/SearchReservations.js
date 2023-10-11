@@ -48,19 +48,26 @@ function SearchReservations() {
 
   return (
     <div>
-      <form onSubmit={handleFind}>
+        <div className="p-3 mb-2 bg-primary text-white">
+            <h1>Search</h1>
+            </div>
+            <br />
+      <form onSubmit={handleFind} className="form-group">
         <input
           type="text"
           name="mobile_number"
           placeholder="Enter a customer's phone number"
+          className="form-control w-25"
           value={mobileNumber}
           onChange={handleChange}
+          required
         />
-        <button type="submit">Find</button>
+        <br />
+        <button className="btn btn-primary" type="submit">Find</button>
       </form>
       <div>
         {reservations.length === 0 && searchPerformed ? (
-            <p>No reservations found</p>
+            <p><strong>No reservations found </strong></p>
         ) : (
             <ReservationsList reservations={reservations} handleCancel={handleCancel} cancelReservationError={cancelReservationError} filterFinishedCancelled={false} />
       )}

@@ -58,13 +58,18 @@ const handleSubmit = async (event) => {
 
   return (
         <div>
-        <form onSubmit={handleSubmit}>
+            <div className="p-3 mb-2 bg-primary text-white">
+            <h1>Seat Reservation</h1>
+            </div>
+            <br />
+        <form onSubmit={handleSubmit} className="form-group">
       <div>
         <label htmlFor="table_id">Select a Table:</label>
         <select
           id="table_id"
           name="table_id"
           value={selectedTable}
+          className="form-control w-25"
           onChange={(e) => setSelectedTable(e.target.value)}
           required
         >
@@ -76,9 +81,11 @@ const handleSubmit = async (event) => {
           ))}
         </select>
       </div>
-      <button type="submit">Seat Reservation</button>
+      <br />
+      <button type="submit" className="btn btn-primary">Seat Reservation</button>
+      <button type="button" className="btn btn-danger" onClick={handleCancel}>Cancel</button>
     </form>
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        
         <ErrorAlert error={reservationError} />
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={seatReservationError} />

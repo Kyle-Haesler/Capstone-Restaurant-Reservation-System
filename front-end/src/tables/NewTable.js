@@ -49,13 +49,18 @@ function NewTable(){
     };
     return (
         <div>
-        <form onSubmit={handleSubmit}>
+            <div className="p-3 mb-2 bg-primary text-white">
+            <h1>New Table</h1>
+            </div>
+            <br />
+        <form onSubmit={handleSubmit} className="form-group">
             <label htmlFor="table_name">
                 Table Name:
                 <input 
                 id="table_name"
                 type="text"
                 name="table_name"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.table_name}
                 required
@@ -68,6 +73,7 @@ function NewTable(){
                 id="capacity"
                 type="number"
                 name="capacity"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.capacity}
                 required
@@ -75,9 +81,9 @@ function NewTable(){
                 />
             </label>
             <br />
-            <button type="submit">Submit</button>
+            <button className="btn btn-primary" type="submit">Submit</button>
+            <button className="btn btn-danger" type="button" onClick={handleCancel}>Cancel</button>
         </form>
-        <button type="button" onClick={handleCancel}>Cancel</button>
         <ErrorAlert error={tableError} />
         </div>
     )
