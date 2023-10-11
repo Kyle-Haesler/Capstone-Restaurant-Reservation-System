@@ -4,6 +4,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
 
 function NewTable(){
+    // state for catching errors associated with API call to create new table
     const [tableError, setTableError] = useState(null);
     const history = useHistory()
     const initialFormState = {
@@ -11,6 +12,7 @@ function NewTable(){
         capacity: ""
     }
     const [formData, setFormData] = useState({...initialFormState})
+    // live validation for length of name, converts capacity to number for the backend
     const handleChange = ({target}) => {
         if(target.name === "capacity"){
             setFormData({
@@ -32,6 +34,7 @@ function NewTable(){
     const handleCancel = () => {
         history.goBack()
     }
+    // API call to create a new table and catch any errors 
     const handleSubmit = async (event) => {
         setTableError(null)
         const abortController = new AbortController();
@@ -47,6 +50,7 @@ function NewTable(){
         return () => abortController.abort();
         
     };
+    // shows new table form and any errors from the front-end or the back-end
     return (
         <div>
             <div className="p-3 mb-2 bg-primary text-white">

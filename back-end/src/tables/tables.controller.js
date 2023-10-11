@@ -1,11 +1,12 @@
 const tablesService = require("./tables.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
-// new table validation
+
 
 const requiredProperties = [
     "table_name",
     "capacity"
   ]
+  // ensures body data is A. there and B. has the required properties for creation of a new table
   function bodyDataComplete(req, res, next){
     if(!req.body.data){
     next({
@@ -25,6 +26,7 @@ const requiredProperties = [
   } 
   return next()
   }
+  // ensures capacity is a positive number
   function validCapacity(req, res, next) {
     const { capacity } = req.body.data;
     if (typeof capacity === "string" || capacity <= 0) {
@@ -35,6 +37,7 @@ const requiredProperties = [
     }
     return next()
     }
+    // ensures table_name is atleast two characters
     function validTableName(req, res, next){
         const {table_name} = req.body.data
         if(table_name.trim().length < 2){
@@ -46,7 +49,7 @@ const requiredProperties = [
         return next()
     }
 
-// read validations
+// ensures the table does in fact exist
 async function tableExists(req, res, next){
   const tableId = req.params.table_id
   const data = await tablesService.read(tableId)
@@ -60,19 +63,7 @@ async function tableExists(req, res, next){
   next()
 }
 
-async function create(req, res, next){
-    const data = await tablesService.create(req.body.data)
-    res.status(201).json({data})
-  }
-async function list(req, res, next){
-    const data = await tablesService.list()
-    res.json({data})
-}
-function read(req, res, next){
-  const table = res.locals.table
-  res.json({data: table})
-}
-// PUT tables/:table_id/seat validation
+// ensures data property is present
 function dataExists(req, res, next){
   if(!req.body.data){
     next({
@@ -82,6 +73,7 @@ function dataExists(req, res, next){
   }
   return next()
 }
+// ensures a reservation_id property is present for status change request
 function reservationIdPresent(req, res, next){
   if(!req.body.data.reservation_id){
     next({
@@ -91,6 +83,7 @@ function reservationIdPresent(req, res, next){
   }
   return next()
 }
+// ensures the reservation actually exists
 async function reservationExists(req, res, next){
   const resID = req.body.data.reservation_id
   const data = await tablesService.readRes(resID)
@@ -103,8 +96,8 @@ async function reservationExists(req, res, next){
   res.locals.reservation = data[0]
   next()
 }
-// PUT /tables/:table_id/seat validation 
-// make sure the reservation isn't already seated
+
+// ensures reservation isn't already seated before trying to seat 
 function reservationNotAlreadySeated(req, res, next){
   const resStatus = res.locals.reservation.status
   if(resStatus === "seated"){
@@ -115,6 +108,7 @@ function reservationNotAlreadySeated(req, res, next){
   }
   next()
 }
+// ensures a table has room for the reservation before attempting to seat
 function tableHasCapacity(req, res, next){
   const resParty = res.locals.reservation.people
   const capacity = res.locals.table.capacity
@@ -126,6 +120,7 @@ function tableHasCapacity(req, res, next){
   }
   next()
 }
+// ensures table is open when attempting to seat a reservation
 function tableIsOpen(req, res, next){
   const status = res.locals.table.reservation_id
   if(status){
@@ -136,6 +131,7 @@ function tableIsOpen(req, res, next){
   }
   next()
 }
+// ensures a table is occupied before attempting to finish
 function tableIsNotSeated(req, res, next){
   const status = res.locals.table.reservation_id
   if(!status){
@@ -147,7 +143,19 @@ function tableIsNotSeated(req, res, next){
   next()
 }
 
-// PUT tables/:table_id/seat
+// PRIMARY FUNCTIONS
+async function create(req, res, next){
+  const data = await tablesService.create(req.body.data)
+  res.status(201).json({data})
+}
+async function list(req, res, next){
+  const data = await tablesService.list()
+  res.json({data})
+}
+function read(req, res, next){
+const table = res.locals.table
+res.json({data: table})
+}
 async function reserveAndChangeStatus(req, res, next){
   const tableId = req.params.table_id
   const resId = res.locals.reservation.reservation_id
@@ -155,13 +163,13 @@ async function reserveAndChangeStatus(req, res, next){
   const data = await tablesService.reserveAndChangeStatus(tableId, resId, status)
   res.json({data})
 }
-// DELETE tables/:table_id/seat
 async function destroy(req, res, next){
   const tableId = req.params.table_id
   const status = "finished"
   const data = await tablesService.delete(tableId, status)
   res.json({data})
 }
+
   
   
   module.exports = {

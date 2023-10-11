@@ -1,6 +1,6 @@
 const reservationsService = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
-// validation for POST request
+
 const requiredProperties = [
   "first_name",
   "last_name",
@@ -9,6 +9,7 @@ const requiredProperties = [
   "reservation_time",
   "people"
 ]
+// ensures body data is A. present and B. contains necessary properties
 function bodyDataComplete(req, res, next){
   if(!req.body.data){
   next({
@@ -28,7 +29,7 @@ for(let property of requiredProperties){
 } 
 return next()
 }
-
+// ensures reservation_date is in the proper format
 function validDate(req, res, next){
 const {reservation_date} = req.body.data
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
@@ -40,6 +41,7 @@ if(!dateRegex.test(reservation_date)){
 }
 return next()
 }
+// ensures reservation_time is in the proper format
 function validTime(req, res, next) {
 const { reservation_time } = req.body.data;
 const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -51,6 +53,7 @@ if (!timeRegex.test(reservation_time)) {
 }
 return next();
 }
+// ensures people is a number
 function validPeople(req, res, next) {
 const { people } = req.body.data;
 if (typeof people === "string" || people <= 0) {
@@ -61,6 +64,7 @@ if (typeof people === "string" || people <= 0) {
 }
 return next()
 }
+// ensures status for new reservation is booked
 function validStatusForNewReservation(req, res, next){
   const resStatus = req.body.data.status
   if(resStatus){
@@ -73,6 +77,7 @@ function validStatusForNewReservation(req, res, next){
   }
   next()
 }
+// ensures reservation_date is not on a Tuesday
 function restaurantOpen(req, res, next){
   const {reservation_date} = req.body.data
   const daysOfTheWeek =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -87,6 +92,7 @@ function restaurantOpen(req, res, next){
   }
   return next()
 }
+// ensures reservation_date is not in the past
 function isReservationDateValid(req, res, next){
   const {reservation_date} = req.body.data
   const currentDate = new Date().toISOString().split("T")[0]
@@ -100,6 +106,7 @@ function isReservationDateValid(req, res, next){
   res.locals.current = currentDate
   return next()
 }
+// ensures reservation is during business hours and not in the past
 function isReservationTimeValid(req, res, next){
   const {reservation_time} = req.body.data
   const numberTime = Number(reservation_time.split(":").join(""))
@@ -124,7 +131,7 @@ function isReservationTimeValid(req, res, next){
   }
   return next()
 }
-// reservation validation
+// ensures the reservation does exist
 async function reservationExists(req, res, next){
   const resId = req.params.reservation_id
   const data = await reservationsService.read(resId)
@@ -136,6 +143,45 @@ async function reservationExists(req, res, next){
   }
   res.locals.reservation = data[0]
   next()
+}
+const validStatuses = [
+  "booked",
+  "seated",
+  "finished",
+  "cancelled"
+]
+// ensures status is valid for update request
+function statusUpdateisValid(req, res, next){
+  const resStatus = req.body.data.status
+  if(!validStatuses.includes(resStatus)){
+    return next({
+      status: 400,
+      message: `Inputted status: ${resStatus}, valid statuses include: booked, seated, finished.`
+    })
+  }
+  next()
+}
+// ensures a status update request is valid 
+function statusUpdateAvailable(req, res, next){
+  const existingStatus = res.locals.reservation.status
+  if(existingStatus === "finished"){
+    return next({
+      status: 400,
+      message: "This reservation is finished, a finished reservation cannot be updated."
+    })
+  }
+  next()
+}
+// PRIMARY FUNCTIONS
+async function updateReservationStatus(req, res, next){
+  const resID = req.params.reservation_id
+  const data = await reservationsService.updateReservationStatus(resID, req.body.data)
+  res.json({data})
+}
+async function update(req, res, next){
+  const resID = req.params.reservation_id
+  const data = await reservationsService.update(resID, req.body.data)
+  res.json({data})
 }
 async function list(req, res, next) {
   if(req.query.date){
@@ -161,46 +207,6 @@ function read(req, res, next){
   const reservation = res.locals.reservation
   res.json({data: reservation})
 }
-// validation for PUT /reservations/:reservation_id/status
-const validStatuses = [
-  "booked",
-  "seated",
-  "finished",
-  "cancelled"
-]
-function statusUpdateisValid(req, res, next){
-  const resStatus = req.body.data.status
-  if(!validStatuses.includes(resStatus)){
-    return next({
-      status: 400,
-      message: `Inputted status: ${resStatus}, valid statuses include: booked, seated, finished.`
-    })
-  }
-  next()
-}
-function statusUpdateAvailable(req, res, next){
-  const existingStatus = res.locals.reservation.status
-  if(existingStatus === "finished"){
-    return next({
-      status: 400,
-      message: "This reservation is finished, a finished reservation cannot be updated."
-    })
-  }
-  next()
-}
-// PUT reservations/:reservation_id/status
-async function updateReservationStatus(req, res, next){
-  const resID = req.params.reservation_id
-  const data = await reservationsService.updateReservationStatus(resID, req.body.data)
-  res.json({data})
-}
-// PUT reservations/:reservation_id
-async function update(req, res, next){
-  const resID = req.params.reservation_id
-  const data = await reservationsService.update(resID, req.body.data)
-  res.json({data})
-}
-
 
 module.exports = {
   list: asyncErrorBoundary(list),

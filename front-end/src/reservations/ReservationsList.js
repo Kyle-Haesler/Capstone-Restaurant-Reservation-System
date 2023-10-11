@@ -1,11 +1,11 @@
 import React from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 function ReservationsList({ reservations, handleCancel, cancelReservationError, filterFinishedCancelled }) {
-    
+    // will filter list depending on if it is used for the dashboard or the search page
         const filteredReservations = filterFinishedCancelled ? reservations.filter((reservation) => reservation.status !== "finished" && reservation.status !== "cancelled")
         : reservations
         
-    
+    // shows list of reservations
     return (
         <>
         <ErrorAlert error={cancelReservationError} />

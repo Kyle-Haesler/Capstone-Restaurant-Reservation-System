@@ -8,13 +8,18 @@ import { editReservation } from "../utils/api";
 import ReservationForm from "./ReservationForm";
 
 function EditReservation(){
+    // state for API call to get the reservation as well as state for errors that may occur
     const [reservation, setReservation] = useState([])
     const [reservationError, setReservationError] = useState(null)
+    // state for API call errors on update request
     const [updatedResError, setUpdatedResError] = useState(null)
     const history = useHistory()
     const {reservation_id} = useParams()
+    // make API call to get reservation anytime the reservation Id in the parameters changes
     useEffect(loadReservation, [reservation_id])
+
     const [formData, setFormData] = useState({})
+    // API call to get the reservation and then set that reservation to formData, will catch any errors
     function loadReservation(){
         const abortController = new AbortController();
         setReservationError(null)
@@ -33,7 +38,7 @@ function EditReservation(){
         }).catch(setReservationError)
     return () => abortController.abort();
   }
-
+  // will convert people to a number for the backend
     const handleChange = ({target}) => {
         if(target.name === "people"){
             setFormData({
@@ -48,6 +53,7 @@ function EditReservation(){
     const handleCancel = () => {
         history.goBack()
     }
+    // extensive front-end validation for edit form, will make API call to update the reservation and catch any errors
     const handleSubmit = async (event) => {
         setUpdatedResError(null)
         const abortController = new AbortController();
@@ -99,6 +105,7 @@ function EditReservation(){
         return () => abortController.abort();
     }
     };
+    // will show the form with populated data and return any front-end validation errors as well as backend validation errors
     return (
         <div>
             <div className="p-3 mb-2 bg-primary text-white">

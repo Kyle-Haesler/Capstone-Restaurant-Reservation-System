@@ -5,17 +5,22 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 
 function SeatReservation(){
+    // state for API call to get reservation along with the state used for any errors that may come along
     const [reservation, setReservation] = useState([])
     const [reservationError, setReservationError] = useState(null)
+    // state for API call to list tables along with the state used for any errors that may come along
     const [tables, setTables] = useState([])
     const [tablesError, setTablesError] = useState(null)
+    // state for table selection on form
     const [selectedTable, setSelectedTable] = useState("");
+    // state for API call error to seat the reservation
     const [seatReservationError, setSeatReservationError] = useState(null)
     const {reservation_id} = useParams()
     const history = useHistory()
+    // API calls to get the reservation and the tables everytime reservation ID is changed in the parameters
     useEffect(loadReservation, [reservation_id])
     useEffect(loadTables, [reservation_id])
-
+    // API call to get the reservation and capture any errors
     function loadReservation(){
         const abortController = new AbortController();
         setReservationError(null)
@@ -23,6 +28,7 @@ function SeatReservation(){
         .then(setReservation).catch(setReservationError)
     return () => abortController.abort();
   }
+// API call to get the tables and capture any errors
   function loadTables(){
     const abortController = new AbortController();
     setTablesError(null)
@@ -33,6 +39,7 @@ return () => abortController.abort();
 const handleCancel = () => {
     history.goBack()
 }
+// seat reservation front-end validation along with API call to seat the reservation and capture any errors
 const handleSubmit = async (event) => {
     setSeatReservationError(null)
     event.preventDefault()
@@ -55,7 +62,7 @@ const handleSubmit = async (event) => {
         return () => abortController.abort();
     }
 };
-
+// select form for seating a reservation along with any front-end or backend validation errors
   return (
         <div>
             <div className="p-3 mb-2 bg-primary text-white">

@@ -2,6 +2,7 @@ import React from "react"
 
 
 function ReservationForm({handleSubmit, handleChange, formData, handleCancel}){
+    // reservation form to be used on the edit page as well as the create page
     return (
         <div>
         <form onSubmit={handleSubmit} className="form-group">

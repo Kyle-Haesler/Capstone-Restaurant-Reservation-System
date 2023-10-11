@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationForm from "./ReservationForm";
 
 function NewReservation(){
+    // state for API call errors during creation of a new reservation
     const [reservationsError, setReservationsError] = useState(null);
     const history = useHistory()
     const initialFormState = {
@@ -16,6 +17,7 @@ function NewReservation(){
         people: ""
     }
     const [formData, setFormData] = useState({...initialFormState})
+    // will convert people to a number for the backend
     const handleChange = ({target}) => {
         if(target.name === "people"){
             setFormData({
@@ -30,6 +32,7 @@ function NewReservation(){
     const handleCancel = () => {
         history.goBack()
     }
+    // extensive front-end validation along with API call to create new reservation and catch any errors
     const handleSubmit = async (event) => {
         setReservationsError(null)
         const abortController = new AbortController();
@@ -76,6 +79,7 @@ function NewReservation(){
         return () => abortController.abort();
     }
     };
+    // shows form and any front-end or back-end validation errors as well as the form itself
     return (
         <div>
             <div className="p-3 mb-2 bg-primary text-white">

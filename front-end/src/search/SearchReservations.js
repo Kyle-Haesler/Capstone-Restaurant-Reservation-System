@@ -5,15 +5,19 @@ import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 
 function SearchReservations() {
+    // state for mobile number in the search form
   const [mobileNumber, setMobileNumber] = useState("");
+  // state for API call to search reservations and any errors that may come along with
     const [reservations, setReservations] = useState([])
     const [reservationsError, setReservationsError] = useState(null)
+    // state for errors associated with API call to cancel a reservation
     const [cancelReservationError, setCancelReservationError] = useState(null)
+    // state for keeping track of whether or not a search has been performed
     const [searchPerformed, setSearchPerformed] = useState(false)
   const handleChange = ({target}) => {
     setMobileNumber(target.value);
   };
-
+// API call to search for reservations and catch any errors
   const handleFind = async (event) => {
     event.preventDefault();
     setReservationsError(null)
@@ -28,6 +32,7 @@ function SearchReservations() {
     }
     return () => abortController.abort();
   };
+  // API call to cancel a reservation and catch any errors
   async function handleCancel(reservationId){
     const confirmed = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
     if(confirmed){
@@ -44,7 +49,7 @@ function SearchReservations() {
     }
 
   }
-
+// shows the reservations found or a message saying none were found at all. Same component used in dashboard but unfiltered to show all results. Also shows any errors
 
   return (
     <div>

@@ -14,25 +14,30 @@ import ReservationsList from "../reservations/ReservationsList";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  // state for API call to list reservations as well as any errors that may come along
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  // state for API call to list tables, as well as any errors that may come along
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  // state for API call errors for finishing table
   const [endDiningExperienceError, setEndDiningExperienceError] = useState(null)
+ // state for API call errors to cancel reservation
   const [cancelReservationError, setCancelReservationError] = useState(null)
   const history = useHistory()
   const location = useLocation()
   const params = new URLSearchParams(location.search)
+  // if no date is in the params, we use the current date
   let applicableDate;
   if(params.get("date")){
     applicableDate = params.get("date")
   } else {
     applicableDate = date
   }
-  
+  // make API calls to get the reservations and the tables everytime the date in the params change
   useEffect(loadDashboard, [applicableDate]);
   
-
+// API calls to get the reservations and the tables and catch any errors that may occur
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null)
@@ -50,25 +55,29 @@ function Dashboard({ date }) {
       });
     return () => abortController.abort();
   }
+  // go back one day (button)
   function handlePrevious(){
     const newDate = previous(applicableDate)
 
     history.push(`/dashboard?date=${newDate}`);
   }
+  // go to today's date (button)
   function handleToday(){
     history.push(`/dashboard?date=${date}`);
   }
+  // go forward one day (button)
   function handleNext(){
     const newDate = next(applicableDate)
     history.push(`/dashboard?date=${newDate}`);
   }
+  // validation and API call to finish the table and catch any errors
   async function handleFinish(tableID, reservationID){
     setEndDiningExperienceError(null)
     const confirmMessage = "Is this table ready to seat new guests? This cannot be undone."
     const confirmed = window.confirm(confirmMessage)
     if(confirmed){
       const abortController = new AbortController()
-        // make sure table is occupied before allowing to to finish
+        // make sure table is occupied before allowing to finish
         if(!reservationID){
           setEndDiningExperienceError({message: "This table is not occupied, please select a different table to finish."})
         } else {
@@ -82,6 +91,7 @@ function Dashboard({ date }) {
     }
     }
   }
+  // API call to cancel the reservation and catch any errors
   async function handleCancel(reservationId){
     const confirmed = window.confirm("Do you want to cancel this reservation? This cannot be undone.")
     if(confirmed){
@@ -98,7 +108,7 @@ function Dashboard({ date }) {
     }
 
   }
-
+// main dashboard that shows the reservation list (filtered) as well as the tables
   return (
     <main>
       <div className="p-3 mb-2 bg-primary text-white">
