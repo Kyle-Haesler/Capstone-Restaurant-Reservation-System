@@ -117,32 +117,39 @@ function Dashboard({ date }) {
       <ErrorAlert error={reservationsError} />
       <ErrorAlert error={tablesError} />
       </div>
-      <div>
+        <div className="row">
+          <div className="col-md-6">
       <ReservationsList reservations={reservations} handleCancel={handleCancel} cancelReservationError={cancelReservationError} filterFinishedCancelled={true} />
       </div>
+      
+      
       <br />
-      <div>
-        {tables.map((table, index) => (
+      <div className="col-md-6">
+        {tables.map((table) => (
           <div key={table.table_id}>
-            <h3 data-table-id-status={table.table_id}>
+            <h5 className="p-3 mb-2 bg-light text-dark" data-table-id-status={table.table_id}>
         {table.reservation_id ? "Occupied" : "Free"}
-      </h3>
-          <h4>Table: {table.table_id}</h4>
-          <p>Table Name: {table.table_name}</p>
-          <p>Reservation ID: {table.reservation_id}</p>
-          <p>Capacity: {table.capacity}</p>
-          <p>Created At: {table.created_at}</p>
-          <p>Updated At: {table.updated_at}</p>
+        
+      </h5>
+          <h5 className="p-3 mb-2 bg-secondary text-white">Table: {table.table_id}</h5>
+          <p><strong>Table Name:</strong> {table.table_name}</p>
+          <p><strong>Reservation ID:</strong> {table.reservation_id}</p>
+          <p><strong>Capacity: </strong> {table.capacity}</p>
+          <p><strong>Created At: </strong> {table.created_at}</p>
+          <p><strong>Updated At: </strong>{table.updated_at}</p>
           {table.reservation_id && (
             <button 
             type="button"
+            className="btn btn-danger"
             data-table-id-finish={table.table_id}
             onClick={() => handleFinish(table.table_id, table.reservation_id)}
             >Finish</button>
           )}
           <ErrorAlert error={endDiningExperienceError} />
+          <hr />
           </div>
         ))}
+        </div>
       </div>
     </main>
   );

@@ -14,16 +14,16 @@ function ReservationsList({ reservations, handleCancel, cancelReservationError, 
         filteredReservations.map((reservation) => (
             <div key={reservation.reservation_id}>
               <h5 className="p-3 mb-2 bg-secondary text-white">Reservation: {reservation.reservation_id}</h5>
-              <p className="font-weight-bold">First Name: {reservation.first_name}</p>
-              <p className="font-weight-bold">Last Name: {reservation.last_name}</p>
-              <p className="font-weight-bold">Phone Number: {reservation.mobile_number}</p>
-              <p className="font-weight-bold">Date: {reservation.reservation_date}</p>
-              <p className="font-weight-bold">Time: {reservation.reservation_time}</p>
-              <p className="font-weight-bold">Party Of: {reservation.people}</p>
-              <p className="font-weight-bold">Created At: {reservation.created_at}</p>
-              <p className="font-weight-bold">Updated At: {reservation.updated_at}</p>
-              <div className="font-weight-bold" data-reservation-id-status={reservation.reservation_id}>
-                Status: {reservation.status}
+              <p><strong>First Name: </strong>{reservation.first_name}</p>
+              <p><strong>Last Name: </strong>{reservation.last_name}</p>
+              <p><strong>Phone Number: </strong>{reservation.mobile_number}</p>
+              <p><strong>Date: </strong>{reservation.reservation_date}</p>
+              <p><strong>Time: </strong>{reservation.reservation_time}</p>
+              <p><strong>Party Of: </strong>{reservation.people}</p>
+              <p><strong>Created At: </strong>{reservation.created_at}</p>
+              <p><strong>Updated At: </strong>{reservation.updated_at}</p>
+              <div data-reservation-id-status={reservation.reservation_id}>
+                <strong>Status: </strong>{reservation.status}
                 </div>
                 <br />
                 {reservation.status === "booked" && (
