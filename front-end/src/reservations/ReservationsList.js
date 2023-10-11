@@ -13,28 +13,29 @@ function ReservationsList({ reservations, handleCancel, cancelReservationError, 
     {reservations && (
         filteredReservations.map((reservation) => (
             <div key={reservation.reservation_id}>
-              <h3>Reservation: {reservation.reservation_id}</h3>
-              <p>First Name: {reservation.first_name}</p>
-              <p>Last Name: {reservation.last_name}</p>
-              <p>Phone Number: {reservation.mobile_number}</p>
-              <p>Date: {reservation.reservation_date}</p>
-              <p>Time: {reservation.reservation_time}</p>
-              <p>Party Of: {reservation.people}</p>
-              <p>Created At: {reservation.created_at}</p>
-              <p>Updated At: {reservation.updated_at}</p>
-              <div data-reservation-id-status={reservation.reservation_id}>
+              <h5 className="p-3 mb-2 bg-secondary text-white">Reservation: {reservation.reservation_id}</h5>
+              <p className="font-weight-bold">First Name: {reservation.first_name}</p>
+              <p className="font-weight-bold">Last Name: {reservation.last_name}</p>
+              <p className="font-weight-bold">Phone Number: {reservation.mobile_number}</p>
+              <p className="font-weight-bold">Date: {reservation.reservation_date}</p>
+              <p className="font-weight-bold">Time: {reservation.reservation_time}</p>
+              <p className="font-weight-bold">Party Of: {reservation.people}</p>
+              <p className="font-weight-bold">Created At: {reservation.created_at}</p>
+              <p className="font-weight-bold">Updated At: {reservation.updated_at}</p>
+              <div className="font-weight-bold" data-reservation-id-status={reservation.reservation_id}>
                 Status: {reservation.status}
                 </div>
+                <br />
                 {reservation.status === "booked" && (
                   <a href={`/reservations/${reservation.reservation_id}/seat`}>
-                  <button>Seat</button>
+                  <button type="button" className="btn btn-success">Seat</button>
                 </a>
                 )}
                 <a href={`/reservations/${reservation.reservation_id}/edit`}>
-                  <button>Edit</button>
+                  <button type="button" className="btn btn-warning">Edit</button>
                 </a>
-                <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
-                
+                <button type="button" className="btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
+                <hr />
               </div>
               ))
     )}

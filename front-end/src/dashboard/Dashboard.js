@@ -101,13 +101,17 @@ function Dashboard({ date }) {
 
   return (
     <main>
+      <div className="p-3 mb-2 bg-primary text-white">
       <h1>Dashboard</h1>
+      </div>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+      <div className="p-3 mb-2 bg-success-subtle text-emphasis-success">
+        <h4 className="mb-0">Reservations for {applicableDate}</h4>
         </div>
-        <button type="button" onClick={handlePrevious}>Previous</button>
-        <button type="button" onClick={handleToday}>Today</button>
-        <button type="button" onClick={handleNext}>Next</button>
+        </div>
+        <button type="button" className="btn btn-dark" onClick={handlePrevious}>Previous</button>
+        <button type="button" className="btn btn-primary" onClick={handleToday}>Today</button>
+        <button type="button" className="btn btn-dark" onClick={handleNext}>Next</button>
       <div>
         <br />
       <ErrorAlert error={reservationsError} />
