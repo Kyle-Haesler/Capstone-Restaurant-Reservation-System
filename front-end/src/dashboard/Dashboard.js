@@ -119,7 +119,7 @@ function Dashboard({ date }) {
       <br />
       <div>
         {tables.map((table, index) => (
-          <div key={index}>
+          <div key={table.table_id}>
             <h3 data-table-id-status={table.table_id}>
         {table.reservation_id ? "Occupied" : "Free"}
       </h3>
