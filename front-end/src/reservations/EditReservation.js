@@ -101,8 +101,7 @@ function EditReservation(){
     };
     return (
         <div>
-        <ReservationForm formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <ReservationForm formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} handleCancel={handleCancel} />
         <ErrorAlert error={reservationError} />
         <ErrorAlert error={updatedResError} />
         </div>

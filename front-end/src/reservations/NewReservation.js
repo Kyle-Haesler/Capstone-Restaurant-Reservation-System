@@ -78,8 +78,10 @@ function NewReservation(){
     };
     return (
         <div>
-        <ReservationForm formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+            <div className="p-3 mb-2 bg-primary text-white">
+            <h1>New Reservation</h1>
+            </div>
+        <ReservationForm formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} handleCancel={handleCancel} />
         <ErrorAlert error={reservationsError} />
         </div>
     )

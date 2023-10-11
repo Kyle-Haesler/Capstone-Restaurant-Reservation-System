@@ -1,14 +1,15 @@
 import React from "react"
 
 
-function ReservationForm({handleSubmit, handleChange, formData}){
+function ReservationForm({handleSubmit, handleChange, formData, handleCancel}){
     return (
         <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form-group">
             <label htmlFor="first_name">
                 First Name:
                 <input 
                 id="first_name"
+                className="form-control"
                 type="text"
                 name="first_name"
                 onChange={handleChange}
@@ -22,6 +23,7 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 <input 
                 id="last_name"
                 type="text"
+                className="form-control"
                 name="last_name"
                 onChange={handleChange}
                 value={formData.last_name}
@@ -35,6 +37,7 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 id="mobile_number"
                 type="text"
                 name="mobile_number"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.mobile_number}
                 required
@@ -47,6 +50,7 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 id="reservation_date"
                 type="date"
                 name="reservation_date"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.reservation_date}
                 required
@@ -59,6 +63,7 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 id="reservation_time"
                 type="time"
                 name="reservation_time"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.reservation_time}
                 required
@@ -71,6 +76,7 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 id="people"
                 type="number"
                 name="people"
+                className="form-control"
                 onChange={handleChange}
                 value={formData.people}
                 required
@@ -78,7 +84,8 @@ function ReservationForm({handleSubmit, handleChange, formData}){
                 />
             </label>
             <br />
-            <button type="submit">Submit</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
+            <button type="button" className="btn btn-danger" onClick={handleCancel}>Cancel</button>
         </form>
         </div>
         )
