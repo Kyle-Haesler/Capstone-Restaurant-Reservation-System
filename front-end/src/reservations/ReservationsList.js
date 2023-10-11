@@ -7,7 +7,10 @@ function ReservationsList({ reservations, handleCancel, cancelReservationError, 
         
     
     return (
-    reservations && (
+        <>
+        <ErrorAlert error={cancelReservationError} />
+        
+    {reservations && (
         filteredReservations.map((reservation) => (
             <div key={reservation.reservation_id}>
               <h3>Reservation: {reservation.reservation_id}</h3>
@@ -31,10 +34,11 @@ function ReservationsList({ reservations, handleCancel, cancelReservationError, 
                   <button>Edit</button>
                 </a>
                 <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => handleCancel(reservation.reservation_id)}>Cancel</button>
-                <ErrorAlert error={cancelReservationError} />
+                
               </div>
               ))
-    )
+    )}
+    </>
   );
 }
 
