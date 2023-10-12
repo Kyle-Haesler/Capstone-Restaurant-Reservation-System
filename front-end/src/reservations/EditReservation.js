@@ -17,8 +17,15 @@ function EditReservation(){
     const {reservation_id} = useParams()
     // make API call to get reservation anytime the reservation Id in the parameters changes
     useEffect(loadReservation, [reservation_id])
-
-    const [formData, setFormData] = useState({})
+    const initialFormState = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: ""
+    }
+    const [formData, setFormData] = useState({...initialFormState})
     // API call to get the reservation and then set that reservation to formData, will catch any errors
     function loadReservation(){
         const abortController = new AbortController();
