@@ -62,7 +62,7 @@ function SearchReservations() {
           type="text"
           name="mobile_number"
           placeholder="Enter a customer's phone number"
-          className="form-control w-25"
+          className="form-control"
           value={mobileNumber}
           onChange={handleChange}
           required

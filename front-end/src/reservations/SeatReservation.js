@@ -76,7 +76,7 @@ const handleSubmit = async (event) => {
           id="table_id"
           name="table_id"
           value={selectedTable}
-          className="form-control w-25"
+          className="form-control"
           onChange={(e) => setSelectedTable(e.target.value)}
           required
         >
