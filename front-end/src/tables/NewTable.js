@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {useHistory} from "react-router-dom"
 import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
@@ -12,6 +12,8 @@ function NewTable(){
         capacity: ""
     }
     const [formData, setFormData] = useState({...initialFormState})
+    // initialize abort controller for cleanup after submit
+    const abortController = useMemo(() => new AbortController(), [])
     // live validation for length of name, converts capacity to number for the backend
     const handleChange = ({target}) => {
         if(target.name === "capacity"){
@@ -37,7 +39,6 @@ function NewTable(){
     // API call to create a new table and catch any errors 
     const handleSubmit = async (event) => {
         setTableError(null)
-        const abortController = new AbortController();
         event.preventDefault()
         
         try {
@@ -50,6 +51,12 @@ function NewTable(){
         return () => abortController.abort();
         
     };
+    // clean up component unmount
+    useEffect(() => {
+        return () => {
+            abortController.abort()
+        }
+    }, [abortController])
     // shows new table form and any errors from the front-end or the back-end
     return (
         <div>

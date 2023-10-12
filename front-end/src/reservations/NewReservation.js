@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {useHistory} from "react-router-dom"
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -17,6 +17,8 @@ function NewReservation(){
         people: ""
     }
     const [formData, setFormData] = useState({...initialFormState})
+    // initialize abort controller for cleanup after submit
+    const abortController = useMemo(() => new AbortController(), [])
     // will convert people to a number for the backend
     const handleChange = ({target}) => {
         if(target.name === "people"){
@@ -35,7 +37,6 @@ function NewReservation(){
     // extensive front-end validation along with API call to create new reservation and catch any errors
     const handleSubmit = async (event) => {
         setReservationsError(null)
-        const abortController = new AbortController();
         event.preventDefault()
         const daysOfTheWeek =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
             const potentialReservationDate = new Date(formData.reservation_date)
@@ -79,6 +80,12 @@ function NewReservation(){
         return () => abortController.abort();
     }
     };
+    // clean up component unmount
+    useEffect(() => {
+        return () => {
+            abortController.abort()
+        }
+    }, [abortController])
     // shows form and any front-end or back-end validation errors as well as the form itself
     return (
         <div>
