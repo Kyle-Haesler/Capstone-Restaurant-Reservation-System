@@ -15,7 +15,8 @@ The Restaurant Reservation System Application is a system for handling reservati
 To install this application: fork and clone this repository and run npm install.  
 To run the tests: run npm run test.  
 NOTE: If you are having trouble running the tests for this application try using version 14 of Node.js (Specifically if you are receiving a minimatch error while running tests).
-The live application is running here:
+The live application is running here: https://restaurant-reservation-system-front-end.onrender.com  
+Backend URL: https://restaurant-reservation-system-back-end.onrender.com
 
 ## Usage
 
