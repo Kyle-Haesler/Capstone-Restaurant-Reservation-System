@@ -19,7 +19,7 @@ function containsText(page, selector, expected) {
         .includes(expected);
     },
     selector,
-    expected
+    expected,
   );
 }
 

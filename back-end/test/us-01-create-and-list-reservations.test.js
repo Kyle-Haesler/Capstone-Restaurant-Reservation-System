@@ -355,7 +355,7 @@ describe("US-01 - Create and list reservations", () => {
           last_name: "last",
           mobile_number: "800-555-1212",
           people: 2,
-        })
+        }),
       );
       expect(response.status).toBe(201);
     });

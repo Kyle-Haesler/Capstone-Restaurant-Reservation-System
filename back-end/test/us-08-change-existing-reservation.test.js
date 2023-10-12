@@ -56,7 +56,7 @@ describe("US-08 - Change an existing reservation", () => {
       expect(reservation).not.toBeUndefined();
 
       Object.entries(data).forEach(
-        ([key, value]) => (reservation[key] = value)
+        ([key, value]) => (reservation[key] = value),
       );
 
       const response = await request(app)
@@ -71,7 +71,7 @@ describe("US-08 - Change an existing reservation", () => {
           last_name: "Whale",
           mobile_number: "1231231235",
           people: 2,
-        })
+        }),
       );
       expect(response.status).toBe(200);
     });

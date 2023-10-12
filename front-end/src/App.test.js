@@ -7,7 +7,7 @@ test("renders title", () => {
   render(
     <Router>
       <App />
-    </Router>
+    </Router>,
   );
   const restaurant = screen.getByText(/periodic tables/i);
   expect(restaurant).toBeInTheDocument();

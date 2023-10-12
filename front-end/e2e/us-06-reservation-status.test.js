@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -10,7 +10,7 @@ const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
-    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson),
   );
 
 describe("US-06 - Reservation status - E2E", () => {
@@ -64,7 +64,7 @@ describe("US-06 - Reservation status - E2E", () => {
       const containsBooked = await containsText(
         page,
         `[data-reservation-id-status="${reservation.reservation_id}"]`,
-        "booked"
+        "booked",
       );
 
       expect(containsBooked).toBe(true);
@@ -88,14 +88,14 @@ describe("US-06 - Reservation status - E2E", () => {
       const containsSeated = await containsText(
         page,
         `[data-reservation-id-status="${reservation.reservation_id}"]`,
-        "seated"
+        "seated",
       );
 
       expect(containsSeated).toBe(true);
       expect(
         await page.$(
-          `[href="/reservations/${reservation.reservation_id}/seat"]`
-        )
+          `[href="/reservations/${reservation.reservation_id}/seat"]`,
+        ),
       ).toBeNull();
     });
 
@@ -129,8 +129,8 @@ describe("US-06 - Reservation status - E2E", () => {
 
       expect(
         await page.$(
-          `[data-reservation-id-status="${reservation.reservation_id}"]`
-        )
+          `[data-reservation-id-status="${reservation.reservation_id}"]`,
+        ),
       ).toBeNull();
     });
   });

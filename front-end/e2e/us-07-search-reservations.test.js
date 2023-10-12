@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -7,7 +7,7 @@ const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
-    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson),
   );
 
 describe("US-07 - Search reservations - E2E", () => {
@@ -43,7 +43,7 @@ describe("US-07 - Search reservations - E2E", () => {
       await Promise.all([
         page.click("button[type=submit]"),
         page.waitForResponse((response) =>
-          response.url().includes("mobile_number=")
+          response.url().includes("mobile_number="),
         ),
       ]);
 
@@ -58,21 +58,19 @@ describe("US-07 - Search reservations - E2E", () => {
       await page.type("input[name=mobile_number]", "1231231232");
 
       await page.screenshot({
-        path:
-          ".screenshots/us-07-search-reservations-submit-no-result-before.png",
+        path: ".screenshots/us-07-search-reservations-submit-no-result-before.png",
         fullPage: true,
       });
 
       await Promise.all([
         page.click("button[type=submit]"),
         page.waitForResponse((response) =>
-          response.url().includes("mobile_number=")
+          response.url().includes("mobile_number="),
         ),
       ]);
 
       await page.screenshot({
-        path:
-          ".screenshots/us-07-search-reservations-submit-no-result-after.png",
+        path: ".screenshots/us-07-search-reservations-submit-no-result-after.png",
         fullPage: true,
       });
       await expect(page).toMatch(/No reservations found/);

@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -10,7 +10,7 @@ const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
-    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson),
   );
 
 describe("US-05 - Finish an occupied table - E2E", () => {
@@ -65,7 +65,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
       const containsOccupied = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
-        "occupied"
+        "occupied",
       );
 
       expect(containsOccupied).toBe(true);
@@ -75,7 +75,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
 
       page.on("dialog", async (dialog) => {
         expect(dialog.message()).toContain(
-          "Is this table ready to seat new guests?"
+          "Is this table ready to seat new guests?",
         );
         await dialog.accept();
       });
@@ -94,7 +94,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
       const containsFree = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
-        "free"
+        "free",
       );
 
       expect(containsFree).toBe(true);
@@ -109,7 +109,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
       const containsOccupied = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
-        "occupied"
+        "occupied",
       );
 
       expect(containsOccupied).toBe(true);
@@ -119,7 +119,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
 
       page.on("dialog", async (dialog) => {
         expect(dialog.message()).toContain(
-          "Is this table ready to seat new guests?"
+          "Is this table ready to seat new guests?",
         );
         await dialog.dismiss();
       });
@@ -136,7 +136,7 @@ describe("US-05 - Finish an occupied table - E2E", () => {
       const containsFree = await containsText(
         page,
         `[data-table-id-status="${table.table_id}"]`,
-        "free"
+        "free",
       );
 
       expect(containsFree).toBe(false);

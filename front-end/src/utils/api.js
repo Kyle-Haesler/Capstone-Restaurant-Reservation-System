@@ -65,69 +65,69 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 // POST /reservations
-export async function createReservation(reservation, signal){
-  const url = new URL(`${API_BASE_URL}/reservations`)
-  const method = "POST"
+export async function createReservation(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const method = "POST";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  const body = JSON.stringify({data: reservation})
-  return await fetchJson(url, {method, headers, body, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify({ data: reservation });
+  return await fetchJson(url, { method, headers, body, signal }, []);
 }
 // POST /tables
-export async function createTable(newTable, signal){
-  const url = new URL(`${API_BASE_URL}/tables`)
-  const method = "POST"
+export async function createTable(newTable, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const method = "POST";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  const body = JSON.stringify({data: newTable})
-  return await fetchJson(url, {method, headers, body, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify({ data: newTable });
+  return await fetchJson(url, { method, headers, body, signal }, []);
 }
 // GET /tables
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  return await fetchJson(url, { headers, signal }, [])
+  return await fetchJson(url, { headers, signal }, []);
 }
 // GET /reservations/:reservation_id
 export async function getReservation(param, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${param}`);
-  return await fetchJson(url, { headers, signal }, [])
+  return await fetchJson(url, { headers, signal }, []);
 }
 // PUT tables/:table_id/seat
-export async function updateTable(tableId, reservationId, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
-  const method = "PUT"
+export async function updateTable(tableId, reservationId, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const method = "PUT";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  const body = JSON.stringify({data: {reservation_id: reservationId}})
-  return await fetchJson(url, {method, headers, body, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify({ data: { reservation_id: reservationId } });
+  return await fetchJson(url, { method, headers, body, signal }, []);
 }
 // DELETE tables/:table_id/seat
-export async function removeTableAssignment(tableId, signal){
-  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`)
-  const method = "DELETE"
+export async function removeTableAssignment(tableId, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${tableId}/seat`);
+  const method = "DELETE";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  return await fetchJson(url, {method, headers, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  return await fetchJson(url, { method, headers, signal }, []);
 }
 
 // PUT reservations/:reservation_id/status
-export async function updateReservationStatus(resID, status, signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${resID}/status`)
-  const method = "PUT"
+export async function updateReservationStatus(resID, status, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${resID}/status`);
+  const method = "PUT";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  const body = JSON.stringify({data: {status: status}})
-  return await fetchJson(url, {method, headers, body, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify({ data: { status: status } });
+  return await fetchJson(url, { method, headers, body, signal }, []);
 }
 // GET reservations/?mobile_number
 export async function searchReservations(params, signal) {
@@ -138,13 +138,13 @@ export async function searchReservations(params, signal) {
 }
 
 // PUT reservations/:reservation_id
-export async function editReservation(resID, updatedRes, signal){
-  const url = new URL(`${API_BASE_URL}/reservations/${resID}`)
-  const method = "PUT"
+export async function editReservation(resID, updatedRes, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${resID}`);
+  const method = "PUT";
   const headers = {
-    "Accept": "application/json",
-    "Content-Type": "application/json"
-  }
-  const body = JSON.stringify({data: updatedRes})
-  return await fetchJson(url, {method, headers, body, signal}, [])
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify({ data: updatedRes });
+  return await fetchJson(url, { method, headers, body, signal }, []);
 }

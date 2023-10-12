@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -7,7 +7,7 @@ const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
-    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson),
   );
 
 describe("US-02 - Create reservation on a future, working date - E2E", () => {

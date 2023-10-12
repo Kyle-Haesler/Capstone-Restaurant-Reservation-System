@@ -43,7 +43,7 @@ describe("US-06 - Reservation status", () => {
           last_name: "last",
           mobile_number: "800-555-1212",
           people: 2,
-        })
+        }),
       );
       expect(response.status).toBe(201);
     });
@@ -68,7 +68,7 @@ describe("US-06 - Reservation status", () => {
 
         expect(response.body.error).toContain(status);
         expect(response.status).toBe(400);
-      }
+      },
     );
   });
 
@@ -134,7 +134,7 @@ describe("US-06 - Reservation status", () => {
 
         expect(response.body.data).toHaveProperty("status", status);
         expect(response.status).toBe(200);
-      }
+      },
     );
   });
 
@@ -231,7 +231,7 @@ describe("US-06 - Reservation status", () => {
       expect(reservationResponse.body.error).toBeUndefined();
       expect(reservationResponse.body.data).toHaveProperty(
         "status",
-        "finished"
+        "finished",
       );
       expect(reservationResponse.status).toBe(200);
     });
@@ -270,14 +270,14 @@ describe("US-06 - Reservation status", () => {
 
       const reservationsResponse = await request(app)
         .get(
-          `/reservations?date=${asDateString(reservationOne.reservation_date)}`
+          `/reservations?date=${asDateString(reservationOne.reservation_date)}`,
         )
         .set("Accept", "application/json");
 
       expect(reservationsResponse.body.error).toBeUndefined();
 
       const finishedReservations = reservationsResponse.body.data.filter(
-        (reservation) => reservation.status === "finished"
+        (reservation) => reservation.status === "finished",
       );
 
       expect(finishedReservations).toHaveLength(0);

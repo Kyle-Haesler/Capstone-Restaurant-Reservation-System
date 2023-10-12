@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -9,7 +9,7 @@ const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 const onPageConsole = (msg) =>
   Promise.all(msg.args().map((event) => event.jsonValue())).then((eventJson) =>
-    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson)
+    console.log(`<LOG::page console ${msg.type()}>`, ...eventJson),
   );
 
 describe("US-08 - Change an existing reservation - E2E", () => {
@@ -61,8 +61,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         await page.waitForSelector(hrefSelector);
 
         await page.screenshot({
-          path:
-            ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
+          path: ".screenshots/us-08-dashboard-edit-click-after-no-change-expected.png",
           fullPage: true,
         });
 
@@ -82,13 +81,13 @@ describe("US-08 - Change an existing reservation - E2E", () => {
 
         if (!cancelButton) {
           throw new Error(
-            `Cancel button for reservation_id ${reservation.reservation_id} was not found.`
+            `Cancel button for reservation_id ${reservation.reservation_id} was not found.`,
           );
         }
 
         page.on("dialog", async (dialog) => {
           expect(dialog.message()).toContain(
-            "Do you want to cancel this reservation?"
+            "Do you want to cancel this reservation?",
           );
           await dialog.accept();
         });
@@ -142,13 +141,13 @@ describe("US-08 - Change an existing reservation - E2E", () => {
         `${baseURL}/reservations/${reservation.reservation_id}/edit`,
         {
           waitUntil: "networkidle0",
-        }
+        },
       );
     });
 
     test("canceling form returns to the previous page", async () => {
       const [cancelButton] = await page.$x(
-        "//button[contains(translate(., 'ACDEFGHIJKLMNOPQRSTUVWXYZ', 'acdefghijklmnopqrstuvwxyz'), 'cancel')]"
+        "//button[contains(translate(., 'ACDEFGHIJKLMNOPQRSTUVWXYZ', 'acdefghijklmnopqrstuvwxyz'), 'cancel')]",
       );
 
       if (!cancelButton) {
@@ -179,7 +178,7 @@ describe("US-08 - Change an existing reservation - E2E", () => {
       await firstNameInput.type("John");
 
       const [submitButton] = await page.$x(
-        "//button[contains(translate(., 'ACDEFGHIJKLMNOPQRSTUVWXYZ', 'acdefghijklmnopqrstuvwxyz'), 'submit')]"
+        "//button[contains(translate(., 'ACDEFGHIJKLMNOPQRSTUVWXYZ', 'acdefghijklmnopqrstuvwxyz'), 'submit')]",
       );
 
       if (!submitButton) {
