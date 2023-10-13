@@ -29,6 +29,18 @@ function bodyDataComplete(req, res, next) {
   }
   return next();
 }
+// ensures mobile number is in a valid format
+function mobileNumberValid(req, res, next){
+  const {mobile_number} = req.body.data
+  const mobileNumberRegex = /^[0-9-]+$/
+  if(!mobileNumberRegex.test(mobile_number)){
+    next({
+      status: 400,
+      message: "'mobile_number' is invalid. Please only include numbers and dashes."
+    })
+  }
+  return next()
+}
 // ensures reservation_date is in the proper format
 function validDate(req, res, next) {
   const { reservation_date } = req.body.data;
@@ -229,6 +241,7 @@ module.exports = {
     validTime,
     validPeople,
     restaurantOpen,
+    mobileNumberValid,
     isReservationDateValid,
     isReservationTimeValid,
     validStatusForNewReservation,
