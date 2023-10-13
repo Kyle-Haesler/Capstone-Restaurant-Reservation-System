@@ -260,6 +260,7 @@ module.exports = {
     validTime,
     validPeople,
     restaurantOpen,
+    mobileNumberValid,
     isReservationDateValid,
     isReservationTimeValid,
     validStatusForNewReservation,
